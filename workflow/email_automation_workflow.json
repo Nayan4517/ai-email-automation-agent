@@ -1,1 +1,67 @@
 
+ {
+  "name": "AI Email Automation Agent",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "1",
+      "name": "Email Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const email = {\\n  sender: 'example@company.com',\\n  subject: 'Job Opportunity',\\n  body: 'We would like to discuss an opportunity with you.'\\n};\\n\\nreturn [{ json: email }];"
+      },
+      "id": "2",
+      "name": "Read Email",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        460,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const email = $json;\\n\\nreturn [{\\n  json: {\\n    ...email,\\n    category: 'Job Opportunity',\\n    priority: 'High',\\n    summary: email.body\\n  }\\n}];"
+      },
+      "id": "3",
+      "name": "AI Email Analysis",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        700,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Email Trigger": {
+      "main": [
+        [
+          {
+            "node": "Read Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Email": {
+      "main": [
+        [
+          {
+            "node": "AI Email Analysis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}
